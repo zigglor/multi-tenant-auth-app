@@ -39,14 +39,13 @@ if ($stmt->get_result()->num_rows > 0) {
 	$stmt->bind_param("ssss", $name, $email, $hashed, $tenant);
 	$stmt->execute();
 
-	echo json_encode(["success" => true]);
-
 	// Create new tenant
     $stmt = $db->prepare("INSERT INTO tenants (name, subdomain) VALUES (?, ?)");
     $tenant_name = ucfirst($tenant);
     $stmt->bind_param("ss", $tenant_name, $tenant);
     $stmt->execute();
     $tenant_id = $stmt->insert_id;
+	
+	echo json_encode(["success" => true]);
 }
-
 
