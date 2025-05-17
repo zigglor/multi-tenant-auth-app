@@ -21,13 +21,6 @@ $stmt->execute();
 $res = $stmt->get_result();
 if ($row = $res->fetch_assoc()) {
     $tenant_id = $row['id'];
-} else {
-    // Create new tenant
-    $stmt = $db->prepare("INSERT INTO tenants (name, subdomain) VALUES (?, ?)");
-    $tenant_name = ucfirst($tenant);
-    $stmt->bind_param("ss", $tenant_name, $tenant);
-    $stmt->execute();
-    $tenant_id = $stmt->insert_id;
 }
 
 // Check if email already exists
@@ -36,15 +29,24 @@ $stmt->bind_param("s", $email);
 $stmt->execute();
 if ($stmt->get_result()->num_rows > 0) {
     echo json_encode(["success" => false, "error" => "Email already exists"]);
-    exit;
+	exit;
+} else {
+	// Hash password
+	$hashed = password_hash($password, PASSWORD_DEFAULT);
+
+	// Insert new user
+	$stmt = $db->prepare("INSERT INTO users (name, email, password, tenant_id, role) VALUES (?, ?, ?, ?, 'user')");
+	$stmt->bind_param("ssss", $name, $email, $hashed, $tenant);
+	$stmt->execute();
+
+	echo json_encode(["success" => true]);
+
+	// Create new tenant
+    $stmt = $db->prepare("INSERT INTO tenants (name, subdomain) VALUES (?, ?)");
+    $tenant_name = ucfirst($tenant);
+    $stmt->bind_param("ss", $tenant_name, $tenant);
+    $stmt->execute();
+    $tenant_id = $stmt->insert_id;
 }
 
-// Hash password
-$hashed = password_hash($password, PASSWORD_DEFAULT);
 
-// Insert new user
-$stmt = $db->prepare("INSERT INTO users (name, email, password, tenant_id, role) VALUES (?, ?, ?, ?, 'user')");
-$stmt->bind_param("sssi", $name, $email, $hashed, $tenant_id);
-$stmt->execute();
-
-echo json_encode(["success" => true]);

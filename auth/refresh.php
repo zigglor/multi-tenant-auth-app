@@ -13,28 +13,32 @@ if (!isset($_COOKIE['refresh_token'])) {
     http_response_code(401);
     echo json_encode(["error" => "No refresh token found"]);
     exit;
-}
-
-$refresh_token = $_COOKIE['refresh_token'];
-
-try {
-    $decoded = JWT::decode($refresh_token, new Key($key, 'HS256'));
+} else {
 	
-    $payload = [
-        'iss' => 'https://auth.zigglor.com',
-        'aud' => "tenant" . $decoded->tenant_id,
-        'sub' => $decoded->sub,
-        'role' => $decoded->role,
-        'tenant_id' => $decoded->tenant_id,
-        'exp' => time() + (15 * 60) // 15 minutes
-    ];
+	$refresh_token = $_COOKIE['refresh_token'];
+	
+	if ($refresh_token != "") {
 
-    $access_token = JWT::encode($payload, $key, 'HS256');
+		try {
+			$decoded = JWT::decode($refresh_token, new Key($key, 'HS256'));
+			
+			$payload = [
+				'iss' => 'https://auth.zigglor.com',
+				'aud' => $decoded->sub,
+				'sub' => $decoded->sub,
+				'role' => $decoded->role,
+				'tenant_id' => $decoded->tenant_id,
+				'exp' => time() + (15 * 60) // 15 minutes
+			];
 
-    echo json_encode([
-        "access_token" => $access_token
-    ]);
-} catch (Exception $e) {
-    http_response_code(401);
-    echo json_encode(["error" => "Invalid refresh token", "details" => $e->getMessage()]);
+			$access_token = JWT::encode($payload, $key, 'HS256');
+
+			echo json_encode([
+				"access_token" => $access_token
+			]);
+		} catch (Exception $e) {
+			http_response_code(401);
+			echo json_encode(["error" => "Invalid refresh token", "details" => $e->getMessage()]);
+		}
+	}
 }

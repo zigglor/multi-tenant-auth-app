@@ -38,7 +38,8 @@
 
     input[type="text"],
     input[type="email"],
-    input[type="password"] {
+    input[type="password"],
+	select	{
       width: 100%;
       padding: 12px 15px;
       margin: 10px 0;
@@ -97,6 +98,10 @@
 		border-color: #1a237e;
 	}
 	
+	#tenant option:disabled {
+	  color: red;
+	}
+	
 	.spinner {
       border: 3px solid #f3f3f3;
       border-top: 3px solid #555;
@@ -134,7 +139,7 @@
       <input type="email" id="email" placeholder="Email" required>
       <input type="password" id="password" placeholder="Password" required>
       <select id="tenant" required>
-		  <option value="" disabled selected>Select Tenant Subdomain</option>
+		  <option value="" style="color:#303f9f;" disabled selected>Select Tenant Subdomain</option>
 		  <option value="tenant1">tenant1</option>
 		  <option value="tenant2">tenant2</option>
 		  <option value="tenant3">tenant3</option>
@@ -142,7 +147,7 @@
 		  <option value="tenant5">tenant5</option>
 		</select>
       <button type="submit">Register</button>
-	  <a style="text-decoration: none; font-weight: 600; padding-top: 20px; display: block;color: grey;" href="index.html">Log In</a>
+	  <a style="text-align: center;text-decoration: none; font-weight: 600; padding-top: 20px; display: block;color: grey;" href="index.html">Log In</a>
     </form>
     <div id="message"></div>
   </div>
@@ -172,6 +177,17 @@
         }
       }, 'json');
     });
+	
+	$(document).ready(function() {
+	  $.getJSON('get_registered_tenants.php', function(registered) {
+		$('#tenant option').each(function() {
+		  const value = $(this).val();
+		  if (registered.includes(value)) {
+			$(this).prop('disabled', true).text(value + ' (Taken)');
+		  }
+		});
+	  });
+	});
   </script>
 </body>
 </html>

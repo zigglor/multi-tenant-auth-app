@@ -18,7 +18,7 @@ if ($user && password_verify($password, $user['password'])) {
     // Create refresh token
     $refresh_payload = [
 		'sub' => (int)$user['id'],
-		'tenant_id' => (int)$user['tenant_id'],
+		'tenant_id' => $user['tenant_id'],
 		'role' => $user['role'],
 		'exp' => time() + (7 * 24 * 60 * 60)
 	];
@@ -38,7 +38,7 @@ if ($user && password_verify($password, $user['password'])) {
 
 	echo json_encode([
 		"access_token" => $access_token,
-		"redirect" => "https://tenant" . $user['tenant_id'] . ".zigglor.com"
+		"redirect" => "https://" . $user['tenant_id'] . ".zigglor.com"
 	]);
 
 } else {

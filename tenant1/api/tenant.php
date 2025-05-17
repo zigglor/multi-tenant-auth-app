@@ -26,8 +26,8 @@ try {
     $tenant_id = $payload->tenant_id;
 
     // Fetch tenant info
-    $stmt = $db->prepare("SELECT name, subdomain FROM tenants WHERE id = ?");
-    $stmt->bind_param("i", $tenant_id);
+    $stmt = $db->prepare("SELECT name FROM tenants WHERE subdomain = ?");
+    $stmt->bind_param("s", $tenant_id);
     $stmt->execute();
     $result = $stmt->get_result();
     $tenant = $result->fetch_assoc();
@@ -35,12 +35,12 @@ try {
     if ($tenant) {
         echo json_encode([
             "name" => $tenant['name'],
-            "domain" => $tenant['subdomain'] . ".zigglor.com",
+            "domain" => $tenant_id . ".zigglor.com",
             "status" => "active"
         ]);
     } else {
         http_response_code(404);
-        echo json_encode(["error" => "Tenant not found"]);
+        echo json_encode(["error" => $tenant_id . "Tenant not found"]);
     }
 
 } catch (Exception $e) {
