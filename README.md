@@ -47,10 +47,3 @@
 ## License
 
 MIT License. See `LICENSE` for details.
-"""
-
-# Create and save the README.md file
-readme_path = Path("/mnt/data/README.md")
-readme_path.write_text(readme_content)
-
-readme_path.name
