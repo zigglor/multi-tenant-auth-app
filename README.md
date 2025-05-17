@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
+
 # multi-tenant-auth-app
-=======
->>>>>>> efc251e (Initial Commit)
 
 ## Requirements
 
@@ -58,7 +54,3 @@ readme_path = Path("/mnt/data/README.md")
 readme_path.write_text(readme_content)
 
 readme_path.name
-<<<<<<< HEAD
-=======
->>>>>>> 9f2d408 (Initial commit)
->>>>>>> efc251e (Initial Commit)
