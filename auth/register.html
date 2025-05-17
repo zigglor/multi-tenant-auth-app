@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register | Zigglor Auth</title>
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Varela Round', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f5f7fb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .card {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #303f9f;
+      text-align: center;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: border 0.3s ease;
+    }
+
+    input:focus {
+      border-color: #303f9f;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #303f9f;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #1a237e;
+    }
+
+    #message {
+      text-align: center;
+      margin-top: 15px;
+      color: red;
+    }
+
+    @media (max-width: 500px) {
+      .card {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+
+      input, button {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>Create Account</h2>
+    <form id="registerForm">
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <input type="text" id="tenant" placeholder="Tenant Subdomain (e.g. tenant1)" required>
+      <button type="submit">Register</button>
+	  <a style="text-decoration: none; font-weight: 600; padding-top: 20px; display: block;color: grey;" href="index.html">Log In</a>
+    </form>
+    <div id="message"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    $('#registerForm').submit(function(e) {
+      e.preventDefault();
+      $.post('register.php', {
+        name: $('#name').val(),
+        email: $('#email').val(),
+        password: $('#password').val(),
+        tenant: $('#tenant').val()
+      }, function(res) {
+        if (res.success) {
+          window.location.href = "index.html?registered=1";
+        } else {
+          $('#message').text(res.error || 'Registration failed.');
+        }
+      }, 'json');
+    });
+  </script>
+</body>
+</html>

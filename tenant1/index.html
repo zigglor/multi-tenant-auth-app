@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tenant Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    :root {
+      --primary: #303f9f;
+      --bg-light: #f9f9fb;
+      --bg-dark: #1e1e2e;
+      --text-light: #2c2c2c;
+      --text-dark: #f0f0f0;
+      --card-light: #fff;
+      --card-dark: #2e2e3e;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Varela Round', sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body.dark {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    header {
+      background-color: var(--primary);
+      color: white;
+      padding: 1em 2em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    header .actions i,
+    header .actions button {
+      margin-left: 1em;
+      cursor: pointer;
+    }
+
+    header .actions button {
+      background: white;
+      color: var(--primary);
+      border: none;
+      padding: 0.5em 1em;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 2em auto;
+      padding: 0 1em;
+    }
+
+    .card {
+      background: var(--card-light);
+      border-radius: 16px;
+      padding: 1.5em;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+      margin-bottom: 1.5em;
+      transition: background 0.3s ease;
+    }
+
+    body.dark .card {
+      background: var(--card-dark);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: var(--primary);
+    }
+
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      header .actions {
+        margin-top: 0.5em;
+      }
+
+      header .actions button {
+        margin-left: 0;
+        margin-top: 0.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div><strong>Tenant Dashboard</strong></div>
+    <div class="actions">
+      <i class="fas fa-moon" onclick="toggleTheme()"></i>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="card" id="userInfo">
+      <h2>User Info</h2>
+      <p>Loading user info...</p>
+    </div>
+    <div class="card" id="tenantInfo">
+      <h2>Tenant Info</h2>
+      <p>Loading tenant info...</p>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script>
+	const subdomain = window.location.hostname.split('.')[0];
+	const apiBase = `https://${subdomain}.zigglor.com/api`;
+    const authDomain = "https://auth.zigglor.com";
+
+    function toggleTheme() {
+      document.body.classList.toggle("dark");
+      localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
+    }
+
+    function applySavedTheme() {
+      if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark");
+      }
+    }
+
+    function logout() {
+      localStorage.removeItem("access_token");
+      document.cookie = "refresh_token=; path=/; domain=.zigglor.com; expires=Thu, 01 Jan 1970 00:00:00 UTC; secure; SameSite=None;";
+      window.location.href = authDomain;
+    }
+
+   function fetchData() {
+	  const token = localStorage.getItem("access_token");
+	  console.log(token);
+	  if (!token) {
+		console.error("No access token found in localStorage.");
+		return;
+	  }
+
+	  $.ajax({
+		url: `${apiBase}/profile.php`,
+		method: "GET",
+		headers: { Authorization: `Bearer ${token}` },
+		success: (data) => {
+		  $("#userInfo").html(`
+			<h2>User Info</h2>
+			<p><strong>Name:</strong> ${data.name}</p>
+			<p><strong>Role:</strong> ${data.role}</p>
+			<p><strong>Email:</strong> ${data.email}</p>
+		  `);
+		},
+		error: function(xhr, status, error) {
+		  console.error("Profile fetch failed:", { status, error, response: xhr.responseText });
+		  $("#userInfo").html(`<p style="color:red;">Error fetching profile: ${xhr.responseText}</p>`);
+		}
+	  });
+
+	  $.ajax({
+		url: `${apiBase}/tenant.php`,
+		method: "GET",
+		headers: { Authorization: `Bearer ${token}` },
+		success: (data) => {
+		  $("#tenantInfo").html(`
+			<h2>Tenant Info</h2>
+			<p><strong>Name:</strong> ${data.name}</p>
+			<p><strong>Domain:</strong> ${data.domain}</p>
+		  `);
+		},
+		error: function(xhr, status, error) {
+		  console.error("Tenant fetch failed:", { status, error, response: xhr.responseText });
+		  $("#tenantInfo").html(`<p style="color:red;">Error fetching tenant: ${xhr.responseText}</p>`);
+		}
+	  });
+	}
+
+
+    $(document).ready(function() {
+		$.ajax({
+		  url: 'https://auth.zigglor.com/refresh.php',
+		  method: 'GET',
+		  xhrFields: {
+			withCredentials: true
+		  },
+		  success: function(data) {
+			localStorage.setItem("access_token", data.access_token);
+			$('#status').text("Logged in ✅");
+		  },
+		  error: function() {
+			//window.location.href = "https://auth.zigglor.com/index.html";
+		  }
+		});
+	});
+
+    applySavedTheme();
+    fetchData();
+  </script>
+</body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login</title>
+  
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
+
+  <!-- Style -->
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Varela Round', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f1f3f6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-card {
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    .login-card h2 {
+      color: #303f9f;
+      margin-bottom: 1.5rem;
+    }
+
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 12px;
+      outline: none;
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    input[type="email"]:focus,
+    input[type="password"]:focus {
+      border-color: #303f9f;
+    }
+
+    button {
+      width: 100%;
+      padding: 0.75rem;
+      background: #303f9f;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.2s;
+    }
+
+    button:hover {
+      background: #1a237e;
+    }
+
+    @media (max-width: 500px) {
+      .login-card {
+        padding: 1.5rem;
+        border-radius: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-card">
+    <h2>Welcome Back</h2>
+    <form id="loginForm">
+      <input type="email" id="email" name="email" required placeholder="Email" />
+      <input type="password" id="password" name="password" required placeholder="Password" />
+      <button type="submit">Login</button>
+	  <a style="text-decoration: none; font-weight: 600; padding-top: 20px; display: block;color: grey;" href="register.html">Register</a>
+    </form>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+  $('#loginForm').submit(function(e) {
+    e.preventDefault();
+    $.post('login.php', {
+	  email: $('#email').val(),
+	  password: $('#password').val()
+	}, function(res) {
+	  if (res.access_token && res.redirect) {
+		localStorage.setItem("access_token", res.access_token);
+		setTimeout(() => {
+		  window.location.href = res.redirect;
+		}, 2000);
+	  } else {
+		$('#message').text(res.error || 'Login failed.');
+	  }
+	}, 'json');
+
+  });
+</script>
+
+</body>
+</html>
