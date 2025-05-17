@@ -75,6 +75,44 @@
       margin-top: 15px;
       color: red;
     }
+	
+	#tenant {
+		width: 100%;
+		padding: 10px;
+		border: 1px solid #303f9f;
+		border-radius: 8px;
+		background-color: #fff;
+		color: #303f9f;
+		font-size: 16px;
+		outline: none;
+		appearance: none;
+		background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='10' viewBox='0 0 14 10'%3E%3Cpath fill='%23303f9f' d='M7 10L0 0h14z'/%3E%3C/svg%3E");
+		background-repeat: no-repeat;
+		background-position: right 10px center;
+		background-size: 12px;
+		transition: border 0.3s;
+	}
+
+	#tenant:focus {
+		border-color: #1a237e;
+	}
+	
+	.spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #555;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
     @media (max-width: 500px) {
       .card {
@@ -95,7 +133,14 @@
       <input type="text" id="name" placeholder="Full Name" required>
       <input type="email" id="email" placeholder="Email" required>
       <input type="password" id="password" placeholder="Password" required>
-      <input type="text" id="tenant" placeholder="Tenant Subdomain (e.g. tenant1)" required>
+      <select id="tenant" required>
+		  <option value="" disabled selected>Select Tenant Subdomain</option>
+		  <option value="tenant1">tenant1</option>
+		  <option value="tenant2">tenant2</option>
+		  <option value="tenant3">tenant3</option>
+		  <option value="tenant4">tenant4</option>
+		  <option value="tenant5">tenant5</option>
+		</select>
       <button type="submit">Register</button>
 	  <a style="text-decoration: none; font-weight: 600; padding-top: 20px; display: block;color: grey;" href="index.html">Log In</a>
     </form>
@@ -106,6 +151,12 @@
   <script>
     $('#registerForm').submit(function(e) {
       e.preventDefault();
+	  
+	  // Disable the button and show spinner
+	  $('button')
+		.prop('disabled', true)
+		.html('Registering <span class="spinner"></span>');
+	  
       $.post('register.php', {
         name: $('#name').val(),
         email: $('#email').val(),
@@ -113,8 +164,10 @@
         tenant: $('#tenant').val()
       }, function(res) {
         if (res.success) {
+		$('button').prop('disabled', false).text('Login');
           window.location.href = "index.html?registered=1";
         } else {
+		$('button').prop('disabled', false).text('Register');
           $('#message').text(res.error || 'Registration failed.');
         }
       }, 'json');

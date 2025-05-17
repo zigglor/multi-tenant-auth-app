@@ -73,6 +73,23 @@
     button:hover {
       background: #1a237e;
     }
+	
+	.spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid #555;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 
     @media (max-width: 500px) {
       .login-card {
@@ -91,22 +108,31 @@
       <button type="submit">Login</button>
 	  <a style="text-decoration: none; font-weight: 600; padding-top: 20px; display: block;color: grey;" href="register.html">Register</a>
     </form>
+	<div id="message" style="color: red; margin-top: 10px;"></div>
   </div>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
   $('#loginForm').submit(function(e) {
     e.preventDefault();
+	
+	// Disable the button and show spinner
+	  $('button')
+		.prop('disabled', true)
+		.html('Logging in <span class="spinner"></span>');
+	
     $.post('login.php', {
 	  email: $('#email').val(),
 	  password: $('#password').val()
 	}, function(res) {
 	  if (res.access_token && res.redirect) {
+	  $('button').prop('disabled', false).text('Login');
 		localStorage.setItem("access_token", res.access_token);
 		setTimeout(() => {
 		  window.location.href = res.redirect;
 		}, 2000);
 	  } else {
+	  $('button').prop('disabled', false).text('Login');
 		$('#message').text(res.error || 'Login failed.');
 	  }
 	}, 'json');

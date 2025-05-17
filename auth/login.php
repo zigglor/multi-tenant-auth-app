@@ -42,6 +42,6 @@ if ($user && password_verify($password, $user['password'])) {
 	]);
 
 } else {
-    http_response_code(401);
+    //http_response_code(401);
     echo json_encode(["error" => "Invalid credentials"]);
 }

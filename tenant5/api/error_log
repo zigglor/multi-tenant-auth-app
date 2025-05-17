@@ -1,0 +1,26 @@
+[17-May-2025 07:20:44 UTC] PHP Parse error:  syntax error, unexpected token ";", expecting "]" in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/profile.php on line 21
+[17-May-2025 07:21:25 UTC] PHP Parse error:  syntax error, unexpected token ";", expecting "]" in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/profile.php on line 21
+[17-May-2025 07:34:36 UTC] PHP Warning:  require(/home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/apiconfig.php): Failed to open stream: No such file or directory in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/profile.php on line 2
+[17-May-2025 07:34:36 UTC] PHP Warning:  require(/home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/apiconfig.php): Failed to open stream: No such file or directory in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/profile.php on line 2
+[17-May-2025 07:34:36 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/apiconfig.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/profile.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/profile.php on line 2
+[17-May-2025 07:34:36 UTC] PHP Warning:  require_once(vendor/autoload.php): Failed to open stream: No such file or directory in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/jwt_helper.php on line 2
+[17-May-2025 07:34:36 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/jwt_helper.php:2
+Stack trace:
+#0 /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/tenant.php(3): require()
+#1 {main}
+  thrown in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/jwt_helper.php on line 2
+[17-May-2025 07:35:27 UTC] PHP Warning:  require(/config.php): Failed to open stream: No such file or directory in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/tenant.php on line 2
+[17-May-2025 07:35:27 UTC] PHP Warning:  require(/config.php): Failed to open stream: No such file or directory in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/tenant.php on line 2
+[17-May-2025 07:35:27 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/config.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/tenant.php:2
+Stack trace:
+#0 {main}
+  thrown in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/tenant.php on line 2
+[17-May-2025 07:35:27 UTC] PHP Warning:  require_once(vendor/autoload.php): Failed to open stream: No such file or directory in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/jwt_helper.php on line 2
+[17-May-2025 07:35:27 UTC] PHP Fatal error:  Uncaught Error: Failed opening required 'vendor/autoload.php' (include_path='.:/opt/cpanel/ea-php81/root/usr/share/pear') in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/jwt_helper.php:2
+Stack trace:
+#0 /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/profile.php(3): require()
+#1 {main}
+  thrown in /home/telefonc/zigglor.com/multi-tenant-auth-app/tenant1/api/jwt_helper.php on line 2
