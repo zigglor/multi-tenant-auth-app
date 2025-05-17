@@ -6,5 +6,17 @@
 </IfModule>
 # php -- END cPanel-generated handler, do not edit
 
-Header always set Access-Control-Allow-Origin "https://tenant1.zigglor.com"
-Header always set Access-Control-Allow-Credentials "true"
+<IfModule mod_headers.c>
+    # Match allowed origins
+    SetEnvIf Origin "https://tenant1\.zigglor\.com" AccessControlAllowOrigin=$0
+    SetEnvIf Origin "https://tenant2\.zigglor\.com" AccessControlAllowOrigin=$0
+    SetEnvIf Origin "https://tenant3\.zigglor\.com" AccessControlAllowOrigin=$0
+    SetEnvIf Origin "https://tenant4\.zigglor\.com" AccessControlAllowOrigin=$0
+    SetEnvIf Origin "https://tenant5\.zigglor\.com" AccessControlAllowOrigin=$0
+
+    # Set headers for matched origins
+    Header always set Access-Control-Allow-Origin "%{AccessControlAllowOrigin}e" env=AccessControlAllowOrigin
+    Header always set Access-Control-Allow-Credentials "true" env=AccessControlAllowOrigin
+    Header always set Access-Control-Allow-Headers "Content-Type, Authorization" env=AccessControlAllowOrigin
+</IfModule>
+

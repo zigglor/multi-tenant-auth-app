@@ -1,5 +1,0 @@
-[17-May-2025 14:49:40 UTC] PHP Fatal error:  Uncaught mysqli_sql_exception: Duplicate entry 'tenant2' for key 'tenants.subdomain' in /home/telefonc/zigglor.com/multi-tenant-auth-app/auth/register.php:48
-Stack trace:
-#0 /home/telefonc/zigglor.com/multi-tenant-auth-app/auth/register.php(48): mysqli_stmt->execute()
-#1 {main}
-  thrown in /home/telefonc/zigglor.com/multi-tenant-auth-app/auth/register.php on line 48
