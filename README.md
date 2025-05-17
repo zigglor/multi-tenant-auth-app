@@ -11,12 +11,12 @@
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/zigglor-auth.git
+    git clone https://github.com/zigglor/multi-tenant-auth-app
     ```
 
 2. Install dependencies:
     ```bash
-    cd zigglor-auth/auth
+    cd multi-tenant-auth-app/auth
     composer require firebase/php-jwt
     ```
 
